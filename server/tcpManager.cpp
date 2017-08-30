@@ -117,6 +117,7 @@ int TcpManager::processMsg(Session* pSess)
     while (pkt=pSess->nextHandlerMsg()) {
         handlerMsg(pkt, pSess);
     }
+    sendMsg(pSess);
 }
 
 TcpManager::TcpManager() {

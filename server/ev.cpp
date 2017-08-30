@@ -93,7 +93,9 @@ int Evloop::evloopInit(const char* ip, int port, EvHandlerCbk cb) {
     if (inet_pton(AF_INET, ip, &seraddr.sin_addr) == 0) {
         cout << "invalid ip: " << ip << endl;
         return S_ERR;
-    }
+    };
+    int opt=1;
+    setsockopt(m_serverfd,SOL_SOCKET,SO_REUSEADDR,(char*)&opt,sizeof(opt));
     if(bind(m_serverfd, (struct sockaddr*)&seraddr, sizeof(seraddr)) == -1) {
         cout << "bind fail" << endl;
         return S_ERR;

@@ -1,5 +1,4 @@
 #include "app.h"
-#include "tcpManager.h"
 int handlerMsg(tPkt* pkt, Session* pSess) {
     tMsg*  msg = (tMsg*)(pkt->data);
     tMsgHead* head = &msg->head;
@@ -16,8 +15,5 @@ int handlerMsg(tPkt* pkt, Session* pSess) {
         freePkt( pkt);
     }
     pSess->addSdQueue(pkt);
-    TcpManager::getInstance()->sendMsg(pSess);
-
-
 }
 

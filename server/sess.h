@@ -22,6 +22,7 @@ class Session {
         int parse();
 
         tPkt* nextHandlerMsg();
+        tPkt* nextSendMsg();
         void addSdQueue(tPkt* pkt);
         int  sendMsg();
         int  sendData();

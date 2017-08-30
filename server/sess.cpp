@@ -8,6 +8,7 @@
 #include "app.h"
 extern int g_sendCount;
 extern int g_recvCount;
+extern int g_addWriteQueue;
 extern pthread_mutex_t mutex;
 Session::Session() {
     m_wbufpending = NULL;
@@ -166,21 +167,29 @@ int  Session::sendData() {
     return SD_NONE;
 
 }
+
+tPkt* Session::nextSendMsg(){
+    if(m_wbufpending){
+        return m_wbufpending;
+    }
+    else if(!m_wbufq.empty()){
+        m_wbufpending = m_wbufq.front();
+        m_wbufq.pop();
+        return m_wbufpending;
+    }
+    return NULL;
+}
+
 int  Session::sendMsg() {
     int ret;
-    if (NULL == m_wbufpending) {
-        while (!m_wbufq.empty()) {
-            m_wbufpending = m_wbufq.front();
-            m_wbufq.pop();
-            int res=sendData();
-            if(res==SD_SCCCESS){
-                continue;
-            }
-            return res;
+    while(nextSendMsg()){
+        int res=sendData();
+        if(res==SD_SCCCESS){
+            continue;
         }
+        return res;
     }
     return SD_NONE;
-
 }
 
 tPkt* Session::nextHandlerMsg() {
