@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <cstdlib>
 #include <cstring>
+#include <sys/un.h>
 
 
 #include "ev.h"
@@ -96,8 +97,9 @@ int Evloop::evloopInit(const char* ip, int port, EvHandlerCbk cb) {
     };
     int opt=1;
     setsockopt(m_serverfd,SOL_SOCKET,SO_REUSEADDR,(char*)&opt,sizeof(opt));
+
     if(bind(m_serverfd, (struct sockaddr*)&seraddr, sizeof(seraddr)) == -1) {
-        cout << "bind fail" << endl;
+        cout << "bind fail" <<strerror(errno)<< endl;
         return S_ERR;
     }
 

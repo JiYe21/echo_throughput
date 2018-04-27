@@ -1,4 +1,5 @@
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/time.h>
@@ -66,8 +67,8 @@ static void sendMsg(int fd){
 
 }
 
+    char msg[6*1024]={0};
 static int  recvMsgAck(int fd){
-    char msg[16*1024]={0};
     int res=recv(fd,msg,16*1024,0);
     if(res==-1){
         cout<<"recv fail"<<endl;
@@ -85,6 +86,7 @@ void* workThread(void* arg){
     gettimeofday(&start,NULL);
     while(num--){
         sendMsg(clifd);
+            recvMsgAck(clifd);
     }
     printf("send finish\n");
     int ms,sec;
@@ -116,6 +118,15 @@ int main(int argc,char* argv []){
     cliaddr.sin_port=htons(8888);
     inet_pton(AF_INET,"127.0.0.1",&cliaddr.sin_addr);
 
+    /*clifd=socket(AF_UNIX,SOCK_STREAM,0);
+    if(clifd==-1)
+        return 0;
+    struct sockaddr_un cliaddr;
+    memset(&cliaddr,0,sizeof(cliaddr));
+    cliaddr.sun_family=AF_UNIX;
+    strcpy(cliaddr.sun_path,"/home/test1/a.txt");*/
+    
+
     if(connect(clifd,(struct sockaddr*)&cliaddr,sizeof(cliaddr))==-1)
     {		perror("connect");
         return 0;
@@ -132,9 +143,10 @@ int main(int argc,char* argv []){
     pthread_t thread_id;
     pthread_create(&thread_id,NULL,workThread,NULL);
     while(1){
-        while(true){
+    /*    while(true){
             recvMsgAck(clifd);
-        }
+        }*/
+        sleep(1);
     }
 
 }

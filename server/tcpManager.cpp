@@ -117,6 +117,8 @@ int TcpManager::processMsg(Session* pSess)
     while (pkt=pSess->nextHandlerMsg()) {
         handlerMsg(pkt, pSess);
     }
+   // int fd = pSess->m_fd;
+   //    m_pEvloop->addEvent(fd, SD_WRITABLE);
     sendMsg(pSess);
 }
 

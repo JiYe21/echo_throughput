@@ -1,4 +1,4 @@
 PWD=`pwd`
 echo $PWD
 export GOPATH=$PWD
-go install main
+go install   main
