@@ -27,7 +27,7 @@ type commonMsg struct {
 	body []byte
 }
 
-var service string = "192.168.0.16:8889"
+var service string = "127.0.0.1:8889"
 var data []byte
 var num int = 100000
 var ops uint64
