@@ -9,6 +9,6 @@ FILE:= ev.cpp \
      app.cpp
 
 $(BIN):
-	$(CC) -o$@ $(FLAGS) $(FILE)  -lpthread -ljemalloc
+	$(CC) -O2 -o$@ $(FLAGS) $(FILE)  -lpthread -ljemalloc
 clean:
 	rm -rf *.o server
